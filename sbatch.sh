@@ -5,7 +5,7 @@
 #SBATCH    --error=array.%A_%a.err
 #SBATCH --time=1:00:00
 #SBATCH --qos=normal
-#SBATCH -p owners
+#SBATCH -p owners,normal
 #SBATCH --nodes=1
 #SBATCH --cores=1
 #SBATCH --mem=8000
@@ -15,10 +15,10 @@
 #
 set -beEu -o pipefail
 
-echo "[$0 $(date +%Y%m%d-%H%M%s)] [array-start] SLURM_JOBID = ${SLURM_JOBID}; SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}" >&2
+echo "[$0 $(date +%Y%m%d-%H%M%S)] [array-start] hostname = $(hostname) SLURM_JOBID = ${SLURM_JOBID}; SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}" >&2
 
 task_id=$SLURM_ARRAY_TASK_ID
 bash task.sh $task_id
 
-echo "[$0 $(date +%Y%m%d-%H%M%s)] [array-end] SLURM_JOBID = ${SLURM_JOBID}; SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}" >&2
+echo "[$0 $(date +%Y%m%d-%H%M%S)] [array-end] hostname = $(hostname) SLURM_JOBID = ${SLURM_JOBID}; SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}" >&2
 
