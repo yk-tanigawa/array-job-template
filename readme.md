@@ -45,7 +45,23 @@ It is annoying to check the indeces of the failed jobs. I prepared some scripts 
   - `find_started.sh` and `find_restart.sh` are the scripts to cope with this issue (described later)
 2. Task failed for whatever reasons
   - You script may have a bug, resource requirements may not be sufficient, etc. There are tons of reasons that cause some issues in the job.
-  - ` find_ok.sh` `find_resubmit.sh` are the scripts to check this type of error.
+  - `find_ok.sh` `find_resubmit.sh` are the scripts to check this type of error.
 
 #### `find_started.sh`
-- This script checks *debug lines* (described above) error files 
+
+- This script checks *debug lines* (described above) error files in a directory (1st argument for the script) to enumerate list of task IDs of succesfully started jobs. More specifically, this script looks at line with `array-start` (simple `grep`).
+- usage: `bash find_started.sh .` (to check the current dir)
+
+#### `find_restart.sh`
+
+- This script finds a missing indeces from interval [1, number_of_tasks]. This calls `find_started.sh` as a subroutine. 
+- If you believe the tasks 1-100 is running on the cluster (based on what you get from `squeue`), you can run `find_restart.sh 100 .`. If they are all running, the output should be empty.
+
+#### `find_ok.sh`
+
+- Similar idea to `find_started.sh`, but now this checks `array-end` in debug lines in your error files.
+- usage: `bash find_ok.sh .`
+
+#### `find_resubmit.sh`
+
+- Similar idea to `find_restart.sh`. If you have 800 tasks (usually the same number as `wc -l lookup.tsv`), you can run `find_resubmit.sh 800 .`. If all of them are successful, the output should be empty. If not, look at specific error files to understand what went wrong.
